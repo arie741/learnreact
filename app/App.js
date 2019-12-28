@@ -8,7 +8,8 @@
 import {createAppContainer} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import { createBottomTabNavigator } from 'react-navigation-tabs';
-import 'react-native-gesture-handler'
+import { Formik } from 'formik';
+import 'react-native-gesture-handler';
 
 import React, { Component } from 'react';
 import {
@@ -33,25 +34,25 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 const BooklistArr = [
-                  {
-                    id: 1,
-                    title: 'Harry Potter and the Goblet of Fire',
-                    author: 'J. K. Rowling',
-                    thumbnail: 'https://covers.openlibrary.org/w/id/7984916-M.jpg'
-                  },
-                  {
-                    id: 2,
-                    title: 'The Hobbit',
-                    author: 'J. R. R. Tolkien',
-                    thumbnail: 'https://covers.openlibrary.org/w/id/6979861-M.jpg'
-                  },
-                  {
-                    id: 3,
-                    title: '1984',
-                    author: 'George Orwell',
-                    thumbnail: 'https://covers.openlibrary.org/w/id/7222246-M.jpg'
-                  }
-                ]
+                      {
+                        id: 1,
+                        title: 'Harry Potter and the Goblet of Fire',
+                        author: 'J. K. Rowling',
+                        thumbnail: 'https://covers.openlibrary.org/w/id/7984916-M.jpg'
+                      },
+                      {
+                        id: 2,
+                        title: 'The Hobbit',
+                        author: 'J. R. R. Tolkien',
+                        thumbnail: 'https://covers.openlibrary.org/w/id/6979861-M.jpg'
+                      },
+                      {
+                        id: 3,
+                        title: '1984',
+                        author: 'George Orwell',
+                        thumbnail: 'https://covers.openlibrary.org/w/id/7222246-M.jpg'
+                      }
+                    ]
                 
 class Bookcase extends React.Component {
   state = {Booklist: BooklistArr};
@@ -85,9 +86,44 @@ class Bookcase extends React.Component {
 
 class AddBook extends React.Component {
   render() {
+    const { navigation } = this.props;
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Add Book!</Text>
+        <Formik
+          initialValues={{ title: '' , author: '', thumbnail: '', id: 0}}
+          onSubmit={function(values){
+                      BooklistArr.push({title: values.title,
+                                        author: values.author,
+                                        thumbnail: values.thumbnail,
+                                        id: Math.floor(Math.random() * 1000)+1});
+                      navigation.navigate('Home');
+                    }}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values }) => (
+            <View>
+              <Text>Add Form</Text>
+              <Text>Title</Text>
+              <TextInput
+                onChangeText={handleChange('title')}
+                onBlur={handleBlur('title')}
+                value={values.title}
+              />
+              <Text>Author</Text>
+              <TextInput
+                onChangeText={handleChange('author')}
+                onBlur={handleBlur('author')}
+                value={values.author}
+              />
+              <Text>Thumbnail</Text>
+              <TextInput
+                onChangeText={handleChange('thumbnail')}
+                onBlur={handleBlur('thumbnail')}
+                value={values.thumbnail}
+              />
+              <Button onPress={handleSubmit} title="Submit" />
+            </View>
+          )}
+        </Formik>
       </View>
     );
   }
