@@ -140,7 +140,7 @@ class Profile extends React.Component {
 }
 
 class DetailsScreen extends React.Component {
-  render() {
+  render() {    
     const { navigation } = this.props;
     return (
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
